@@ -3,6 +3,10 @@ const groupLinks = require("./group_links");
 // الأوامر المسموحة داخل جروب الاستقبال فقط
 const ALLOWED_COMMANDS = [".تست", "!تست", "?تست"];
 
+// رابط الجروب الأساسي
+const MAIN_GROUP_LINK =
+    "https://chat.whatsapp.com/GF2RPBs43zVFc2fPFFGdqW";
+
 // حالة كل شخص أثناء الاستقبال
 const receptionUsers = new Map();
 
@@ -90,7 +94,8 @@ async function handleReception(message) {
         await message.reply(
             "『        Display       』\n\n" +
             "『تم تسجيل بياناتك بنجاح ✅』\n\n" +
-            "『استقبال  𝓚𝓲𝓷𝓰 𝓰𝓪𝓶𝓮𝓼』"
+            "『استقبال  𝓚𝓲𝓷𝓰 𝓰𝓪𝓶𝓮𝓼』\n\n" +
+            `『الجروب الأساسي 👇』\n${MAIN_GROUP_LINK}`
         );
 
         return true;
