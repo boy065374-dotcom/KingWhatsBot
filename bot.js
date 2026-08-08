@@ -1,9 +1,8 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
-const { handleReception } = require("./Ist_group");
+const { handleReceptionCommand } = require("./command1");
 const { handleCommand } = require("./commands");
-const groupLinks = require("./group_links");
 
 const client = new Client({
     authStrategy: new LocalAuth({
@@ -18,7 +17,9 @@ const client = new Client({
     }
 });
 
-// QR Code
+let botStatus = false;
+
+// QR
 client.on("qr", (qr) => {
     console.log("\n📱 امسح QR من واتساب:\n");
     qrcode.generate(qr, { small: true });
@@ -26,41 +27,51 @@ client.on("qr", (qr) => {
 
 // جاهز
 client.on("ready", () => {
+    botStatus = true;
+
     console.log("================================");
     console.log("🤖 KingWhatsBot اشتغل بنجاح!");
-    console.log("📥 الاستقبال:", groupLinks.receptionGroup);
-    console.log("🏠 الأساسي:", groupLinks.commandGroup);
     console.log("================================");
 });
 
-// فشل المصادقة
+// فشل تسجيل الدخول
 client.on("auth_failure", (error) => {
+    botStatus = false;
     console.error("❌ فشل تسجيل الدخول:", error);
 });
 
 // فصل الحساب
 client.on("disconnected", (reason) => {
+    botStatus = false;
     console.log("❌ تم فصل البوت:", reason);
 });
 
 // استقبال الرسائل
 client.on("message", async (message) => {
     try {
-        // نظام الاستقبال
-        const receptionHandled = await handleReception(message);
+        // جروب الاستقبال
+        const receptionReply = handleReceptionCommand(
+            message,
+            botStatus
+        );
 
-        if (receptionHandled) {
+        if (receptionReply) {
+            await message.reply(receptionReply);
             return;
         }
 
-        // الأوامر
-        const reply = handleCommand(message.body);
+        // الجروب الأساسي
+        const commandReply = handleCommand(
+            message,
+            botStatus
+        );
 
-        if (reply) {
-            await message.reply(reply);
+        if (commandReply) {
+            await message.reply(commandReply);
         }
 
     } catch (error) {
+        botStatus = false;
         console.error("❌ حصل خطأ:", error);
     }
 });
