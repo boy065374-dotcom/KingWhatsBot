@@ -1,26 +1,25 @@
-const PREFIXES = [".", "!", "؟"];
+const groupLinks = require("./group_links");
 
-function handleCommand(message) {
-    const text = message.trim();
+const TEST_COMMANDS = [".تست", "!تست", "?تست"];
 
-    const prefix = PREFIXES.find(p => text.startsWith(p));
-
-    if (!prefix) {
+function handleCommand(message, botStatus = true) {
+    // الأوامر مسموحة في الجروب الأساسي فقط
+    if (message.from !== groupLinks.commandGroup) {
         return null;
     }
 
-    const command = text
-        .slice(prefix.length)
-        .trim()
-        .toLowerCase();
+    const command = message.body.trim();
 
-    switch (command) {
-        case "تست":
-            return "انا تمام يسطا كمل كمل 😎";
-
-        default:
-            return null;
+    // أمر تست
+    if (TEST_COMMANDS.includes(command)) {
+        if (botStatus === true) {
+            return "انا تمام يسطا كمل كمل";
+        } else {
+            return "البوت مش تمام، ابحث عن المشكلة";
+        }
     }
+
+    return null;
 }
 
 module.exports = {
