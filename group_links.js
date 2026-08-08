@@ -1,4 +1,4 @@
 module.exports = {
-    receptionGroup: "https://chat.whatsapp.com/KYTbcuvGtnx3QqrHxnBl0c",
-    commandGroup: "https://chat.whatsapp.com/GF2RPBs43zVFc2fPFFGdqW"
+    receptionGroup: "120363409932758287@g.us",
+    commandGroup: "120363412227722211@g.us"
 };
